@@ -1,0 +1,22 @@
+param (
+    [string]$Region1,
+    [string]$Region2
+)
+
+$tagSpec = "ResourceType=elastic-ip,Tags=[{Key=route53demo,Value=true}]"
+
+# Allocate Elastic IP in Region1
+aws ec2 allocate-address `
+    --domain vpc `
+    --tag-specifications $tagSpec `
+    --region $Region1 `
+    --output text `
+    --query "[PublicIp, NetworkBorderGroup]"
+
+# Allocate Elastic IP in Region2
+aws ec2 allocate-address `
+    --domain vpc `
+    --tag-specifications $tagSpec `
+    --region $Region2 `
+    --output text `
+    --query "[PublicIp, NetworkBorderGroup]"
